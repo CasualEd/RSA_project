@@ -1,5 +1,5 @@
-import Other_functions
-import DPS_Project
+
+import functions
 from os.path import exists
 def main():
     answer=3
@@ -34,7 +34,7 @@ def main():
             while filename_secret=='':
                 filename_secret=input("What shall be the path to the file containing the secret key : ")
                 incorrect_path=exists(filename_pub)
-            [Pub_Key,Secret_Key]=DPS_Project.generate_Keys(filename_secret,filename_pub)
+            [Pub_Key,Secret_Key]=functions.generate_Keys(filename_secret,filename_pub)
             has_public_key=True
             has_secret_key=True
 
@@ -47,25 +47,25 @@ def main():
                 while filename_secret=='':
                     filename_secret=input("What is the path of the file containing the secret key : ")
                     incorrect_path=exists(filename_secret)
-                Secret_Key=Other_functions.import_Keys(filename_secret,'secret')
+                Secret_Key=functions.import_Keys(filename_secret,'secret')
                 has_secret_key=True
             filename_pub=''
             incorrect_path=True
             while filename_pub=='' and incorrect_path:
                 filename_pub=input("What is the path of the file containing the public key : ")
                 incorrect_path=exists(filename_pub)
-            Pub_Key=Other_functions.import_Keys(filename_pub,'public')
+            Pub_Key=functions.import_Keys(filename_pub,'public')
             has_public_key=True
         elif answer==3:
             if has_public_key and has_secret_key:
                 isFile=int(input('Answer 1 if you want to sign a file \nAnswer 2 if you want to sign a string '+ending))
                 if isFile==1:
                     filename=input('What is the path of the file ? '+ending)
-                    print("The signature of the file is :"+str(DPS_Project.Sign(Pub_Key,Secret_Key,filename,True)))
+                    print("The signature of the file is :"+str(functions.Sign(Pub_Key,Secret_Key,filename,True)))
                 else:
                     object=input('What is the string you want to sign ?'+ending)
                     print("The object is : "+object)
-                    print("The signature of the string is : "+str(DPS_Project.Sign(Pub_Key,Secret_Key,object)))
+                    print("The signature of the string is : "+str(functions.Sign(Pub_Key,Secret_Key,object)))
             else:
                 print("You don't have a secret key or a public key. Please generate one or import one before you can sign.")
         elif answer==4:
@@ -76,7 +76,7 @@ def main():
                     isFile=int(input('Answer 1 if you want to verify the signature of a file \nAnswer 2 if you want to verify the signature of a string '+ending))
                     if isFile==1:
                         filename=input('What is the path of the file ? '+ending)
-                        Correct_Signature=DPS_Project.Verify_Signature(Pub_Key,Signature,None,filename,isFile=True)
+                        Correct_Signature=functions.Verify_Signature(Pub_Key,Signature,None,filename,isFile=True)
                         if Correct_Signature:
                             print("The signature does correspond to the file")
                         else: 
@@ -84,11 +84,11 @@ def main():
                     else:
                         object=input('What is the string ?'+ending)
                         print("The object is :"+object)
-                        Correct_Signature=DPS_Project.Verify_Signature(Pub_Key,Signature,None,object,isFile=False)
+                        Correct_Signature=functions.Verify_Signature(Pub_Key,Signature,None,object,isFile=False)
                         if Correct_Signature:
                             print("The signature does correspond to the string")
                         else: 
                             print("The signature does not correspond to the string")
                 else:
-                    print("This is the hash that can be obtained from verifying the signature : "+str(DPS_Project.Verify_Signature(Pub_Key,Signature)))
+                    print("This is the hash that can be obtained from verifying the signature : "+str(functions.Verify_Signature(Pub_Key,Signature)))
 main()
